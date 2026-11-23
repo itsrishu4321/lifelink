@@ -1,0 +1,7 @@
+# Live data store — regenerated automatically from data.js seed on first run
+db.json
+
+# Logs / OS files
+*.log
+Thumbs.db
+.DS_Store

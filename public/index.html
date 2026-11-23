@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeLink — Blood Donation Network</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="/">
+      <span class="logo-drop">🩸</span> <span>Life<b>Link</b></span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#roles">Roles</a>
+      <a href="#ai">AI Engine</a>
+      <a href="#how">How it works</a>
+    </div>
+    <div class="nav-cta">
+      <button class="btn ghost" onclick="openAuth('login')">Sign in</button>
+      <button class="btn danger" onclick="openAuth('register')">Join free</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<header class="hero">
+  <div class="hero-bg">
+    <div class="pulse p1"></div><div class="pulse p2"></div><div class="pulse p3"></div>
+    <div class="grid-lines"></div>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="badge">🚨 Emergency Mode &nbsp;·&nbsp; Live in 3 cities</div>
+      <h1>Find or donate <span class="hl">blood</span><br>in <span class="hl typewriter" id="tw"></span></h1>
+      <p class="lead">LifeLink connects donors, patients, hospitals &amp; blood banks on one network —
+        powered by <b>AI demand prediction</b>, <b>donor trust scoring</b> and a one-tap
+        <b>emergency broadcast</b>.</p>
+      <div class="hero-actions">
+        <button class="btn danger big" onclick="openAuth('register')">🩸 Become a Donor</button>
+        <button class="btn ghost big" onclick="openAuth('login')">I need blood →</button>
+      </div>
+      <div class="hero-stats">
+        <div><b id="hs1">0</b><span>Donors</span></div>
+        <div><b id="hs2">0</b><span>Requests</span></div>
+        <div><b id="hs3">0</b><span>Lives saved</span></div>
+        <div><b id="hs4">0</b><span>Hospitals</span></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-card">
+        <div class="hc-head"><span class="dot live"></span> Live nearby requests</div>
+        <div class="req-row"><span class="bg-tag o">O−</span><div><b>AIIMS Delhi</b><small>Emergency · 2 units · 1.4 km</small></div><button class="mini" onclick="openAuth('login')">Help</button></div>
+        <div class="req-row"><span class="bg-tag a">A+</span><div><b>KEM Mumbai</b><small>Surgery · 3 units · 3.2 km</small></div><button class="mini" onclick="openAuth('login')">Help</button></div>
+        <div class="req-row"><span class="bg-tag b">B+</span><div><b>Fortis Chennai</b><small>Trauma · 1 unit · 0.8 km</small></div><button class="mini" onclick="openAuth('login')">Help</button></div>
+        <div class="hc-foot">⚡ Avg. donor response time: <b>9 min</b></div>
+      </div>
+      <div class="float-card f1">🧠 AI: O− shortage predicted in 4 days</div>
+      <div class="float-card f2">⭐ Trust score 92 — Excellent donor</div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== FEATURES ===== -->
+<section class="section" id="features">
+  <div class="sec-head">
+    <span class="kicker">Why LifeLink</span>
+    <h2>Everything the market misses — <span class="hl">in one app</span></h2>
+    <p>Existing apps only "search &amp; call". LifeLink closes the App ↔ Hospital software gap.</p>
+  </div>
+  <div class="feat-grid">
+    <div class="feat hot">
+      <div class="fi">🔗</div>
+      <h3>App ↔ Software Integration</h3>
+      <p>Your app isn't a silo — hospital requests, blood-bank inventory and donor actions sync live into one operational network with audit logs.</p>
+    </div>
+    <div class="feat hot">
+      <div class="fi">🧠</div>
+      <h3>AI Demand Prediction</h3>
+      <p>7-day forecast per blood group, shortage risk (critical/high/watch/safe) and the exact action to take — before the crisis hits.</p>
+    </div>
+    <div class="feat hot">
+      <div class="fi">⭐</div>
+      <h3>Donor Trust Score</h3>
+      <p>0–100 reliability score from response rate, show-up rate, punctuality &amp; verification. Patients see who will actually show up.</p>
+    </div>
+    <div class="feat hot">
+      <div class="fi">🚨</div>
+      <h3>Emergency Mode</h3>
+      <p>One tap broadcasts a critical need to every compatible, available donor in the city — with live notified/accepted counters.</p>
+    </div>
+    <div class="feat">
+      <div class="fi">🏥</div>
+      <h3>Hospital + Blood Bank</h3>
+      <p>7-role workflow: staff verify requests, banks track group-wise stock &amp; issue blood with full chain of custody.</p>
+    </div>
+    <div class="feat">
+      <div class="fi">🛡️</div>
+      <h3>Privacy controls</h3>
+      <p>Your number is never public by default. Donors choose exactly what recipients can see.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ROLES ===== -->
+<section class="section alt" id="roles">
+  <div class="sec-head">
+    <span class="kicker">Access model</span>
+    <h2>8 roles. <span class="hl">One network.</span></h2>
+    <p>Every role gets its own purpose-built dashboard &amp; permission scope.</p>
+  </div>
+  <div class="role-grid">
+    <div class="role"><span>🩸</span><b>Donor</b><small>Own profile &amp; donor activities</small></div>
+    <div class="role"><span>🧍</span><b>Patient</b><small>Own blood requests</small></div>
+    <div class="role"><span>👨‍👩‍👦</span><b>Family / Attendant</b><small>Authorized patient requests</small></div>
+    <div class="role"><span>🧑‍⚕️</span><b>Hospital Staff</b><small>Assigned hospital work</small></div>
+    <div class="role"><span>🏥</span><b>Hospital Admin</b><small>Complete hospital management</small></div>
+    <div class="role"><span>🧪</span><b>Blood Bank Staff</b><small>Assigned blood bank work</small></div>
+    <div class="role"><span>🩺</span><b>Blood Bank Admin</b><small>Own blood bank management</small></div>
+    <div class="role sa"><span>👑</span><b>Super Admin</b><small>Entire LifeLink network</small></div>
+  </div>
+</section>
+
+<!-- ===== AI STRIP ===== -->
+<section class="section" id="ai">
+  <div class="ai-wrap">
+    <div>
+      <span class="kicker">AI engine</span>
+      <h2>Predict the shortage <span class="hl">before it happens</span></h2>
+      <p class="lead2">LifeLink analyses request velocity, urgency mix and stock levels across the network to produce a rolling 7-day forecast with a recommended action for each blood group.</p>
+      <ul class="checks">
+        <li>Per blood-group demand forecast</li>
+        <li>Shortage risk rating + action plan</li>
+        <li>City hotspot detection</li>
+        <li>Stock vs demand gap analysis</li>
+      </ul>
+      <button class="btn danger" onclick="openAuth('login')">See a live forecast →</button>
+    </div>
+    <div class="ai-panel">
+      <div class="ai-row"><span class="bg-tag o">O−</span><div class="bar"><i style="width:92%"></i></div><span class="risk crit">Critical</span></div>
+      <div class="ai-row"><span class="bg-tag a">A+</span><div class="bar"><i style="width:64%"></i></div><span class="risk high">High</span></div>
+      <div class="ai-row"><span class="bg-tag b">B+</span><div class="bar"><i style="width:41%"></i></div><span class="risk watch">Watch</span></div>
+      <div class="ai-row"><span class="bg-tag ab">AB+</span><div class="bar"><i style="width:18%"></i></div><span class="risk safe">Safe</span></div>
+      <div class="ai-note">🧠 Suggested action: broadcast O− appeal + schedule camp in Delhi (hotspot)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW ===== -->
+<section class="section alt" id="how">
+  <div class="sec-head">
+    <span class="kicker">How it works</span>
+    <h2>3 steps to <span class="hl">save a life</span></h2>
+  </div>
+  <div class="steps">
+    <div class="step"><b>1</b><h3>Register &amp; verify</h3><p>Sign up as donor, patient, family, hospital or blood bank. Staff roles use an invite code.</p></div>
+    <div class="step"><b>2</b><h3>Match &amp; coordinate</h3><p>Requests flow to verified hospitals → compatible donors are alerted → trust score shows who's reliable.</p></div>
+    <div class="step"><b>3</b><h3>Donate &amp; track</h3><p>Blood bank issues stock, donation is confirmed, trust score updates, certificate is generated.</p></div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta">
+  <h2>Someone needs blood <span class="hl">right now</span>.</h2>
+  <p>Join 500+ people on the LifeLink network. It takes 30 seconds.</p>
+  <div class="hero-actions center">
+    <button class="btn danger big" onclick="openAuth('register')">Create free account</button>
+    <button class="btn ghost big" onclick="openAuth('login')">Sign in</button>
+  </div>
+</section>
+
+<footer class="footer">
+  <div>🩸 <b>LifeLink</b> — Blood Donation Network · Demo project</div>
+  <div class="demo-creds">
+    Demo: <code>superadmin@lifelink.in/admin123</code> · <code>donor@demo.in/donor123</code> ·
+    <code>patient@demo.in/patient123</code> · <code>family@demo.in/family123</code> ·
+    <code>staff@demo.in/staff123</code> · <code>hadmin@demo.in/admin123</code> ·
+    <code>bstaff@demo.in/staff123</code> · <code>badmin@demo.in/admin123</code>
+  </div>
+</footer>
+
+<!-- ===== AUTH MODAL ===== -->
+<div class="modal-back" id="authModal" onclick="if(event.target===this)closeAuth()">
+  <div class="modal">
+    <button class="x" onclick="closeAuth()">✕</button>
+    <div class="m-tabs">
+      <button id="tabLogin" class="on" onclick="switchAuth('login')">Sign in</button>
+      <button id="tabReg" onclick="switchAuth('register')">Create account</button>
+    </div>
+
+    <form id="loginForm" onsubmit="return doLogin(event)">
+      <label>Email<input type="email" id="lEmail" required placeholder="donor@demo.in"></label>
+      <label>Password<input type="password" id="lPass" required placeholder="••••••••"></label>
+      <div class="quick" id="quickLogins"></div>
+      <button class="btn danger full" type="submit">Sign in</button>
+      <p class="err" id="lErr"></p>
+    </form>
+
+    <form id="regForm" class="hide" onsubmit="return doRegister(event)">
+      <label>Full name<input type="text" id="rName" required placeholder="Your name"></label>
+      <label>Email<input type="email" id="rEmail" required placeholder="you@email.com"></label>
+      <label>Password<input type="password" id="rPass" required minlength="6" placeholder="min 6 characters"></label>
+      <div class="row2">
+        <label>Role<select id="rRole">
+          <option value="donor">🩸 Donor</option>
+          <option value="patient">🧍 Patient</option>
+          <option value="family">👨‍👩‍👦 Family / Attendant</option>
+          <option value="hospital_staff">🧑‍⚕️ Hospital Staff</option>
+          <option value="hospital_admin">🏥 Hospital Admin</option>
+          <option value="blood_bank_staff">🧪 Blood Bank Staff</option>
+          <option value="blood_bank_admin">🩺 Blood Bank Admin</option>
+        </select></label>
+        <label>Blood group (donors)<select id="rGroup">
+          <option value="">—</option>
+          <option>O+</option><option>O-</option><option>A+</option><option>A-</option>
+          <option>B+</option><option>B-</option><option>AB+</option><option>AB-</option>
+        </select></label>
+      </div>
+      <div class="row2">
+        <label>City<input type="text" id="rCity" placeholder="Delhi"></label>
+        <label>Phone<input type="text" id="rPhone" placeholder="98xxxxxxxx"></label>
+      </div>
+      <label class="invite" id="inviteWrap" style="display:none">Invite code<input type="text" id="rInvite" placeholder="LIFELINK2026"></label>
+      <p class="hint">Staff/admin roles need invite code — demo: <code>LIFELINK2026</code></p>
+      <button class="btn danger full" type="submit">Create account</button>
+      <p class="err" id="rErr"></p>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---- typewriter ---- */
+const words = ['9 minutes','seconds','one tap','real time'];
+let wi=0,ci=0,del=false;
+function tw(){
+  const el=document.getElementById('tw'); if(!el)return;
+  const w=words[wi];
+  el.textContent = del ? w.slice(0,--ci) : w.slice(0,++ci);
+  if(!del && ci===w.length){del=true;setTimeout(tw,1400);return;}
+  if(del && ci===0){del=false;wi=(wi+1)%words.length;}
+  setTimeout(tw, del?40:85);
+}
+tw();
+
+/* ---- count up ---- */
+function countUp(id,to,suffix){
+  const el=document.getElementById(id);let n=0;const step=Math.max(1,Math.floor(to/60));
+  const t=setInterval(()=>{n+=step;if(n>=to){n=to;clearInterval(t);}el.textContent=n.toLocaleString('en-IN')+(suffix||'');},22);
+}
+setTimeout(()=>{countUp('hs1',4820);countUp('hs2',1265);countUp('hs3',987);countUp('hs4',42);},300);
+
+/* ---- auth modal ---- */
+function openAuth(mode){document.getElementById('authModal').classList.add('on');switchAuth(mode);}
+function closeAuth(){document.getElementById('authModal').classList.remove('on');}
+function switchAuth(mode){
+  const L=document.getElementById('loginForm'),R=document.getElementById('regForm');
+  document.getElementById('tabLogin').classList.toggle('on',mode==='login');
+  document.getElementById('tabReg').classList.toggle('on',mode==='register');
+  L.classList.toggle('hide',mode!=='login');
+  R.classList.toggle('hide',mode!=='register');
+}
+document.getElementById('rRole').addEventListener('change',e=>{
+  const staff=['hospital_staff','hospital_admin','blood_bank_staff','blood_bank_admin'].includes(e.target.value);
+  document.getElementById('inviteWrap').style.display=staff?'block':'none';
+  document.getElementById('rGroup').closest('label').style.opacity=e.target.value==='donor'?1:.35;
+});
+/* quick logins */
+const demos=[
+ ['Super Admin','superadmin@lifelink.in','admin123'],['Donor','donor@demo.in','donor123'],
+ ['Patient','patient@demo.in','patient123'],['Family','family@demo.in','family123'],
+ ['Hosp. Staff','staff@demo.in','staff123'],['Hosp. Admin','hadmin@demo.in','admin123'],
+ ['Bank Staff','bstaff@demo.in','staff123'],['Bank Admin','badmin@demo.in','admin123']];
+document.getElementById('quickLogins').innerHTML=demos.map(d=>
+ `<button type="button" class="qbtn" onclick="quick('${d[1]}','${d[2]}')">${d[0]}</button>`).join('');
+function quick(e,p){document.getElementById('lEmail').value=e;document.getElementById('lPass').value=p;}
+
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),3200);
+}
+async function doLogin(e){
+  e.preventDefault();
+  const r=await fetch('/api/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({email:lEmail.value,password:lPass.value})});
+  const d=await r.json();
+  if(!r.ok){document.getElementById('lErr').textContent=d.error||'Login failed';return false;}
+  localStorage.setItem('ll_token',d.token);localStorage.setItem('ll_user',JSON.stringify(d.user));
+  location.href='/app';return false;
+}
+async function doRegister(e){
+  e.preventDefault();
+  const body={name:rName.value,email:rEmail.value,password:rPass.value,role:rRole.value,
+    bloodGroup:rGroup.value,city:rCity.value,phone:rPhone.value,inviteCode:rInvite.value};
+  const r=await fetch('/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(body)});
+  const d=await r.json();
+  if(!r.ok){document.getElementById('rErr').textContent=d.error||'Registration failed';return false;}
+  localStorage.setItem('ll_token',d.token);localStorage.setItem('ll_user',JSON.stringify(d.user));
+  location.href='/app';return false;
+}
+/* already logged in? */
+if(localStorage.getItem('ll_token'))document.querySelector('.nav-cta').innerHTML=
+  '<button class="btn danger" onclick="location.href=\'/app\'">Open Dashboard →</button>';
+</script>
+</body>
+</html>

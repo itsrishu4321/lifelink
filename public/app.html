@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LifeLink Dashboard</title>
+<link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+<div class="layout">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="side" id="side">
+    <div class="side-logo">🩸 Life<b>Link</b></div>
+    <div class="who" id="whoBox"></div>
+    <nav class="menu" id="menu"></nav>
+    <button class="logout" onclick="logout()">↩ Log out</button>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <main class="main">
+    <header class="top">
+      <button class="burger" onclick="document.body.classList.toggle('nav-open')">☰</button>
+      <div>
+        <h1 id="pageTitle">Dashboard</h1>
+        <p id="pageSub" class="sub"></p>
+      </div>
+      <div class="top-actions">
+        <button class="emg" id="emgBtn" onclick="openEmergency()">🚨 Emergency</button>
+        <div class="bell" onclick="toggleNotif()">🔔<span class="cnt" id="notifCount" hidden>0</span></div>
+        <div class="notif-pop" id="notifPop" hidden></div>
+        <div class="avatar" id="avatar">?</div>
+      </div>
+    </header>
+    <div class="content" id="content">Loading…</div>
+  </main>
+</div>
+
+<!-- emergency modal -->
+<div class="modal-back" id="emgModal" onclick="if(event.target===this)closeEmergency()">
+  <div class="modal">
+    <button class="x" onclick="closeEmergency()">✕</button>
+    <h2 class="mh">🚨 Emergency Broadcast</h2>
+    <p class="msub">Alerts every compatible, available donor in the city instantly.</p>
+    <form onsubmit="return sendEmergency(event)">
+      <label>Blood group<select id="eGroup" required>
+        <option>O-</option><option>O+</option><option>A-</option><option>A+</option>
+        <option>B-</option><option>B+</option><option>AB-</option><option>AB+</option>
+      </select></label>
+      <div class="row2">
+        <label>Units<input type="number" id="eUnits" value="1" min="1" required></label>
+        <label>City<input type="text" id="eCity" required></label>
+      </div>
+      <label>Hospital<input type="text" id="eHosp" placeholder="Hospital name / address"></label>
+      <label>Patient name<input type="text" id="ePatient" placeholder="Patient"></label>
+      <button class="btn-emg" type="submit">Broadcast now ⚡</button>
+      <p class="err" id="eErr"></p>
+    </form>
+    <div id="emgLive"></div>
+  </div>
+</div>
+
+<!-- generic modal (forms / details) -->
+<div class="modal-back" id="gModal" onclick="if(event.target===this)closeG()">
+  <div class="modal" id="gModalBox">
+    <button class="x" onclick="closeG()">✕</button>
+    <div id="gBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="/js/app.js"></script>
+<script src="/js/pages-donor-patient.js"></script>
+<script src="/js/pages-family-hospital.js"></script>
+<script src="/js/pages-bank-super.js"></script>
+</body>
+</html>
