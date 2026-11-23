@@ -1,4 +1,5 @@
-/* LifeLink — Blood Donation Network | Zero-dependency Node.js server */
+/* LifeLink — Blood Donation Network | Zero-dependency Node.js server
+   Runs locally (node server.js) AND on Vercel serverless (api/ function + optional Vercel KV) */
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -9,19 +10,39 @@ const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'db.json');
 const PUBLIC = path.join(__dirname, 'public');
 
+/* --- storage: local file mode OR Vercel KV mode (serverless) --- */
+const KV_URL = process.env.KV_REST_API_URL;
+const KV_TOKEN = process.env.KV_REST_API_TOKEN;
+const useKV = Boolean(KV_URL && KV_TOKEN);
+const KV_KEY = 'lifelink:db';
+async function kvGet() {
+  const r = await fetch(KV_URL + '/get/' + KV_KEY, { headers: { Authorization: 'Bearer ' + KV_TOKEN } });
+  const j = await r.json();
+  return j && typeof j.result === 'string' ? j.result : null;
+}
+async function kvSet(val) {
+  await fetch(KV_URL + '/set/' + KV_KEY, {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + KV_TOKEN, 'Content-Type': 'application/json' },
+    body: JSON.stringify([val])
+  });
+}
+
 let db;
 if (fs.existsSync(DATA_FILE)) {
   try { db = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8')); } catch (e) { db = createSeed(); }
 } else db = createSeed();
 
-let saveTimer = null;
+let saveTimer = null, dirty = false;
 function save() {
+  dirty = true;
+  if (useKV) return;                 // serverless: handler persists to KV after the response
   clearTimeout(saveTimer);
   saveTimer = setTimeout(() => {
     try { fs.writeFileSync(DATA_FILE, JSON.stringify(db)); } catch (e) {}
   }, 300);
 }
-setInterval(() => { try { fs.writeFileSync(DATA_FILE, JSON.stringify(db)); } catch (e) {} }, 15000).unref();
+if (!useKV) setInterval(() => { try { fs.writeFileSync(DATA_FILE, JSON.stringify(db)); } catch (e) {} }, 15000).unref();
 
 const ROLES = ['donor', 'patient', 'family', 'hospital_staff', 'hospital_admin', 'blood_bank_staff', 'blood_bank_admin', 'super_admin'];
 const hash = (pw) => crypto.createHash('sha256').update('lifelink::' + pw).digest('hex');
@@ -780,13 +801,35 @@ function serveStatic(req, res, pathname) {
   });
 }
 
-const server = http.createServer(async (req, res) => {
-  const t0 = Date.now();
+/* ---------------- request handler (shared: local server + Vercel function) ---------------- */
+async function handler(req, res) {
+  // Vercel mode: fresh DB from KV per invocation so every instance stays in sync
+  if (useKV) {
+    try {
+      const s = await kvGet();
+      if (s) db = JSON.parse(s);
+      else { db = createSeed(); }
+    } catch (e) {
+      if (!db) db = createSeed();           // KV unreachable → keep warm in-memory copy
+      console.error('[LifeLink] KV load failed:', e.message);
+    }
+  }
+  db.meta = db.meta || { version: 1, createdAt: Date.now(), apiCalls: 0, syncAt: null };
   db.meta.apiCalls = (db.meta.apiCalls || 0) + 1;
+  dirty = true;
   try {
-    const url = new URL(req.url, 'http://localhost');
-    const pathname = url.pathname;
-    const query = Object.fromEntries(url.searchParams);
+    let pathname, query;
+    if (req.query && req.query.path !== undefined) {
+      // Vercel api/[...path].js — rebuild the original path/query from route params
+      const segs = Array.isArray(req.query.path) ? req.query.path : [req.query.path];
+      pathname = '/api/' + segs.join('/');
+      query = {};
+      for (const [k, v] of Object.entries(req.query)) if (k !== 'path') query[k] = Array.isArray(v) ? v[0] : v;
+    } else {
+      const url = new URL(req.url, 'http://localhost');
+      pathname = url.pathname;
+      query = Object.fromEntries(url.searchParams);
+    }
     if (pathname.startsWith('/api/')) {
       await api(req, res, pathname, query);
     } else if (req.method === 'GET' || req.method === 'HEAD') {
@@ -799,12 +842,22 @@ const server = http.createServer(async (req, res) => {
     if (!res.headersSent) send(res, 500, { error: 'Internal server error' });
     else try { res.end(); } catch (e) {}
   }
-});
+  if (useKV && dirty) {
+    dirty = false;
+    try { await kvSet(JSON.stringify(db)); } catch (e) { console.error('[LifeLink] KV save failed:', e.message); }
+  }
+}
 
-server.listen(PORT, () => {
-  console.log('\n  ❤  LifeLink Blood Donation Network');
-  console.log('  → http://localhost:' + PORT);
-  console.log('  → Demo logins: superadmin@lifelink.in/admin123, donor@demo.in/donor123,\n' +
-              '     patient@demo.in/patient123, family@demo.in/family123, staff@demo.in/staff123,\n' +
-              '     hadmin@demo.in/admin123, bstaff@demo.in/staff123, badmin@demo.in/admin123\n');
-});
+module.exports = handler;
+
+/* local mode: static + API server; Vercel requires this file from api/[...path].js instead */
+if (require.main === module) {
+  const server = http.createServer(handler);
+  server.listen(PORT, () => {
+    console.log('\n  ❤  LifeLink Blood Donation Network');
+    console.log('  → http://localhost:' + PORT);
+    console.log('  → Demo logins: superadmin@lifelink.in/admin123, donor@demo.in/donor123,\n' +
+                '     patient@demo.in/patient123, family@demo.in/family123, staff@demo.in/staff123,\n' +
+                '     hadmin@demo.in/admin123, bstaff@demo.in/staff123, badmin@demo.in/admin123\n');
+  });
+}

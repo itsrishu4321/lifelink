@@ -1,0 +1,9 @@
+{
+  "name": "lifelink",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LifeLink blood donation network - 8 role dashboards, AI demand forecast, donor trust score, emergency mode, medical verification",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
